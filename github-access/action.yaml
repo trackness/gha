@@ -4,7 +4,7 @@ description: "Allow access to private repos / orgs via Personal Access Token"
 inputs:
 
   token:
-    description: "Github Personal Access Token"
+    description: "GitHub Personal Access Token"
     required: true
 
 runs:
