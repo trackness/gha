@@ -90,9 +90,8 @@ jobs:
           working-dir: ${{ env.TF_WORKING_DIR }}
           backend-config: ${{ env.TF_CONFIG_DIR }}/prod.config
           var-file: ${{ env.TF_CONFIG_DIR }}/prod.tfvars
-          vars: """
+          vars: vars: |
             -var owner=$GITHUB_ACTOR \
             -var commit=$GITHUB_SHA \
             -var repo=$GITHUB_REPOSITORY
-          """
 ```
