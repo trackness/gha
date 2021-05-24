@@ -5,9 +5,13 @@ Commonly needed GitHub Actions
 
 Allows access to private repos / orgs via Personal Access Token
 
+usage: `trackness/gha/github-access`
+
 ### Inputs:
 
-`token`: GitHub Personal Access Token
+`token`
+- GitHub Personal Access Token
+- Required: true
 
 ### Outputs:
 
