@@ -1,0 +1,16 @@
+name: Github Access
+description: "Allow access to private repos / orgs via Personal Access Token"
+
+inputs:
+
+  token:
+    description: "Github Personal Access Token"
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+
+    - shell: bash
+      run: git config --global url."https://${{ inputs.token }}@github.com".insteadOf "https://github.com"
