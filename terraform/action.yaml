@@ -1,0 +1,46 @@
+name: Terraform
+description: "Execute terraform init, validate, plan, and apply"
+
+inputs:
+
+  working-dir:
+    description: "'Terraform init' working directory"
+    required: false
+    default: terraform
+
+  backend-config:
+    description: "'Terraform init' backend config file location"
+    required: false
+    default: ""
+
+  plan-file:
+    description: "'Terraform plan' output filename"
+    required: false
+    default: plan.tfout
+
+  var-file:
+    description: "'Terraform plan' tfvars file location"
+    required: false
+    default: ""
+
+  vars:
+    description: "'Terraform plan' CLI variables"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+
+  steps:
+
+    - shell: bash
+      run: |
+        cd ${{ inputs.working-dir }}
+
+        CFG=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}")
+        VAR_FILE=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
+
+        terraform init -no-color -input=false $CFG
+        terraform validate
+        terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
+        terraform apply -lock-timeout=120s -input=false -auto-approve .terraform/${{ inputs.plan-file }}
