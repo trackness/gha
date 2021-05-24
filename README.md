@@ -38,7 +38,7 @@ jobs:
 
 Execute terraform init, validate, plan, and apply
 
-usage: `trackness/gha/github-access`
+usage: `trackness/gha/terraform`
 
 ### Inputs:
 
