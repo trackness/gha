@@ -1,23 +1,10 @@
+cd "$WORKING_DIR" || exit
 
-echo "$WORKING_DIR"
-echo "$BACKEND_CONFIG"
-echo "$PLAN_FILE"
+destroy=$([ "$APPLY_DESTROY" == "true" ] && echo "-destroy")
+backend_config=$([ -z "$BACKEND_CONFIG" ] || echo "-backend-config=$BACKEND_CONFIG")
+var_file=$([ -z "$VAR_FILE" ] || echo "-var-file=$VAR_FILE")
 
-_DESTROY=$([ -z "$DESTROY" ] || echo "-destroy")
-
-echo "$_DESTROY"
-
-#function args() {
-#
-#	while getopts ":w:d:b:p:f:v:" arg; do
-#	do
-#		case $arg in
-#			w) WORKING_DIR=$OPTARG;;
-#			d) DESTROY=$OPTARG;;
-#			b) BACKEND_CONFIG=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}");;
-#			p) PLAN_FILE=$OPTARG;;
-#			f) VAR_FILE=$OPTARG;;
-#			v) VARS=$OPTARG;;
-#		esac
-#	done
-#}
+terraform init -no-color -input=false "$backend_config"
+terraform validate
+terraform plan -lock-timeout=60s -out=.terraform/"$PLAN_FILE" "$var_file" "$VARS"
+terraform apply "$destroy" -lock-timeout=60s -input=false -auto-approve .terraform/"$PLAN_FILE"

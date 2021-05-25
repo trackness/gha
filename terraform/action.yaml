@@ -12,7 +12,7 @@ inputs:
   destroy:
     description: "'Terraform init' backend config file location"
     required: false
-    default: ""
+    default: "false"
 
   backend-config:
     description: "'Terraform init' backend config file location"
@@ -42,7 +42,7 @@ runs:
     - shell: bash
       env:
         WORKING_DIR: ${{ inputs.working-dir }}
-        DESTROY: ${{ inputs.destroy}}
+        APPLY_DESTROY: ${{ inputs.destroy}}
         BACKEND_CONFIG: ${{ inputs.backend-config}}
         PLAN_FILE: ${{ inputs.plan-file }}
         VAR_FILE: ${{ inputs.var-file }}
