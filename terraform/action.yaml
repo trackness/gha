@@ -50,7 +50,7 @@ runs:
 
         if [ ${{ inputs.destroy }} == "true" ]
         then
-          terraform apply -destroy -lock-timeout=120s -input=false -auto-approve
+          terraform apply -destroy -lock-timeout=120s -input=false -auto-approve $VAR_FILE ${{ inputs.vars }}
         else
           terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
           terraform apply -lock-timeout=120s -input=false -auto-approve .terraform/${{ inputs.plan-file }}
