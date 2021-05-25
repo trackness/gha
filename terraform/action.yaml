@@ -42,16 +42,16 @@ runs:
       run: |
         cd ${{ inputs.working-dir }}
 
-        CFG=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}")
-        VAR_FILE=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
+        backend_config=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}")
+        var_file=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
 
-        terraform init -no-color -input=false $CFG
+        terraform init -no-color -input=false $backend_config
         terraform validate
 
         if [ ${{ inputs.destroy }} == "true" ]
         then
-          terraform apply -destroy -lock-timeout=120s -input=false -auto-approve $VAR_FILE ${{ inputs.vars }}
+          terraform apply -destroy -lock-timeout=120s -input=false -auto-approve $var_file ${{ inputs.vars }}
         else
-          terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
+          terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $var_file ${{ inputs.vars }}
           terraform apply -lock-timeout=120s -input=false -auto-approve .terraform/${{ inputs.plan-file }}
         fi
