@@ -1,5 +1,5 @@
 name: Build Go App
-description: "Builds and zips the Poetry app for uploading to AWS Lambda"
+description: "Builds and zips a Poetry app for uploading to AWS Lambda"
 
 inputs:
 

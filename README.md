@@ -1,7 +1,7 @@
 # gha
 Commonly needed GitHub Actions
 
-## github-access
+## `github-access`
 
 Allows access to private repos / orgs via Personal Access Token
 
@@ -26,15 +26,17 @@ on: [push]
 
 jobs:
   github:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
     steps:
 
       - name: Github access
-        uses: trackness/gha/github-access
+        uses: trackness/gha/github-access@main
         with:
           token: <github-pat>
 ```
 
-## terraform
+## `terraform`
 
 Execute terraform init, validate, plan, and apply
 
@@ -47,7 +49,7 @@ usage: `trackness/gha/terraform@main`
 - Required: false
 
 `destroy`
-- 
+- `terraform apply` destroy flag
 
 `backend-config`
 - `terraform init` backend config file location
@@ -78,6 +80,8 @@ on: [push]
 
 jobs:
   github:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
     steps:
 
       - name: Setup Terraform
@@ -93,10 +97,11 @@ jobs:
           working-dir: ${{ env.TF_WORKING_DIR }}
           backend-config: ${{ env.TF_CONFIG_DIR }}/prod.config
           var-file: ${{ env.TF_CONFIG_DIR }}/prod.tfvars
-          vars: vars: |
+          vars: vars: "
             -var owner=$GITHUB_ACTOR \
             -var commit=$GITHUB_SHA \
             -var repo=$GITHUB_REPOSITORY
+            "
 ```
 
 ```
@@ -106,6 +111,8 @@ on: [workflow_dispatch]
 
 jobs:
   github:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
     steps:
 
       - name: Setup Terraform
@@ -114,7 +121,7 @@ jobs:
           terraform_version: 0.15.4
 
       - name: Destroy
-        uses: trackness/gha/terraform
+        uses: trackness/gha/terraform@main
         env:
           TF_CONFIG_DIR: config
         with:
@@ -127,4 +134,55 @@ jobs:
             -var repo=$GITHUB_REPOSITORY
             "
           destroy: true
+```
+
+## `poetry-build`
+
+Builds and zips a Poetry app for uploading to AWS Lambda
+
+usage: `trackness/gha/poetry-build@main`
+
+### Inputs:
+
+`app-name`
+- Name of the app
+- Required: true
+
+`poetry-version`
+- Version of poetry to use
+- Required: false
+
+`pak-name`
+- Contributing package name
+- Required: false
+
+### Outputs:
+
+None
+
+### Example use:
+
+```
+name: Checkout some private repo
+
+on: [push]
+
+jobs:
+  build:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+    
+      - name: Build and zip
+        uses: ./.github/actions/poetry-build
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+          app-name: ${{ env.APP_NAME }}
+          pak-name: python_lambda_template
 ```
