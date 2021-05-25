@@ -8,6 +8,12 @@ inputs:
     required: false
     default: terraform
 
+# TODO : see if destroy can be injected here (via boolean?)
+  destroy:
+    description: "'Terraform init' backend config file location"
+    required: false
+    default: ""
+
   backend-config:
     description: "'Terraform init' backend config file location"
     required: false
@@ -34,13 +40,23 @@ runs:
   steps:
 
     - shell: bash
-      run: |
-        cd ${{ inputs.working-dir }}
+      env:
+        WORKING_DIR: ${{ inputs.working-dir }}
+        DESTROY: ${{ inputs.destroy}}
+        BACKEND_CONFIG: ${{ inputs.backend-config}}
+        PLAN_FILE: ${{ inputs.plan-file }}
+        VAR_FILE: ${{ inputs.var-file }}
+        VARS: ${{ inputs.vars }}
+      run: ${{ github.action_path }}/script.sh
 
-        CFG=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}")
-        VAR_FILE=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
-
-        terraform init -no-color -input=false $CFG
-        terraform validate
-        terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
-        terraform apply -lock-timeout=120s -input=false -auto-approve .terraform/${{ inputs.plan-file }}
+#        cd ${{ inputs.working-dir }}
+#
+#        DESTROY=$([ -z ${{ inputs.destroy }} ] || echo "-destroy")
+#
+#        CFG=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}")
+#        VAR_FILE=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
+#
+#        terraform init -no-color -input=false $CFG
+#        terraform validate
+#        terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
+#        terraform apply "$DESTROY" -lock-timeout=120s -input=false -auto-approve .terraform/${{ inputs.plan-file }}

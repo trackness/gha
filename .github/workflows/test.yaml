@@ -1,0 +1,7 @@
+on: workflow_dispatch
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: terraform
+        uses: trackness/gha/terraform@add_terraform_destroy
