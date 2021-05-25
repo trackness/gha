@@ -8,12 +8,6 @@ inputs:
     required: false
     default: terraform
 
-# TODO : see if destroy can be injected here (via boolean?)
-  destroy:
-    description: "'Terraform init' backend config file location"
-    required: false
-    default: "false"
-
   backend-config:
     description: "'Terraform init' backend config file location"
     required: false
@@ -33,6 +27,11 @@ inputs:
     description: "'Terraform plan' CLI variables"
     required: false
     default: ""
+
+  destroy:
+    description: "'Terraform apply' destroy flag"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
