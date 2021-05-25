@@ -1,7 +1,7 @@
-on: workflow_dispatch
+on: push
 jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
       - name: terraform
-        uses: trackness/gha/terraform@add_terraform_destroy
+        uses: ./terraform
