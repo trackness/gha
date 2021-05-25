@@ -5,7 +5,7 @@ Commonly needed GitHub Actions
 
 Allows access to private repos / orgs via Personal Access Token
 
-usage: `trackness/gha/github-access`
+usage: `trackness/gha/github-access@main`
 
 ### Inputs:
 
@@ -38,13 +38,16 @@ jobs:
 
 Execute terraform init, validate, plan, and apply
 
-usage: `trackness/gha/terraform`
+usage: `trackness/gha/terraform@main`
 
 ### Inputs:
 
 `working-dir`
 - `terraform init` working directory
 - Required: false
+
+`destroy`
+- 
 
 `backend-config`
 - `terraform init` backend config file location
@@ -66,7 +69,7 @@ usage: `trackness/gha/terraform`
 
 None
 
-### Example use:
+### Example uses:
 
 ```
 name: Checkout some private repo
@@ -94,4 +97,34 @@ jobs:
             -var owner=$GITHUB_ACTOR \
             -var commit=$GITHUB_SHA \
             -var repo=$GITHUB_REPOSITORY
+```
+
+```
+name: Destroy deployed plan
+
+on: [workflow_dispatch]
+
+jobs:
+  github:
+    steps:
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.15.4
+
+      - name: Destroy
+        uses: trackness/gha/terraform
+        env:
+          TF_CONFIG_DIR: config
+        with:
+          working-dir: ${{ env.TF_WORKING_DIR }}
+          backend-config: ${{ env.TF_CONFIG_DIR }}/prod.config
+          var-file: ${{ env.TF_CONFIG_DIR }}/prod.tfvars
+          vars: vars: "
+            -var owner=$GITHUB_ACTOR \
+            -var commit=$GITHUB_SHA \
+            -var repo=$GITHUB_REPOSITORY
+            "
+          destroy: true
 ```
