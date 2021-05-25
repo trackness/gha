@@ -47,10 +47,11 @@ runs:
 
         terraform init -no-color -input=false $CFG
         terraform validate
-        terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
+
         if [ ${{ inputs.destroy }} == "true" ]
         then
           terraform apply -destroy -lock-timeout=120s -input=false -auto-approve
         else
+          terraform plan -lock-timeout=60s -out=.terraform/${{ inputs.plan-file }} $VAR_FILE ${{ inputs.vars }}
           terraform apply -lock-timeout=120s -input=false -auto-approve .terraform/${{ inputs.plan-file }}
         fi
