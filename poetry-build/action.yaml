@@ -1,5 +1,5 @@
-name: Build Go App
-description: "Builds and zips a Poetry app for uploading to AWS Lambda"
+name: Install Poetry And Dependencies
+description: "Builds a Poetry app for uploading to AWS Lambda"
 
 inputs:
 
@@ -30,4 +30,4 @@ runs:
         pip -q install poetry$POETRY_VERSION
         poetry export -f requirements.txt --output requirements.txt
         pip -q install -r requirements.txt -t ./$PAK_NAME
-        cd ./$PAK_NAME && zip -q -r9 ../${{ inputs.app-name }}.zip * -x "bin/*"
+#        cd ./$PAK_NAME && zip -q -r9 ../${{ inputs.app-name }}.zip * -x "bin/*"
