@@ -60,7 +60,7 @@ runs:
 
         echo "inputs.backend-configs:      ${{ inputs.backend-configs }}"
         echo "inputs.backend-config-file:  ${{ inputs.backend-config-file }}"
-        echo "backend_config:              ${{ inputs.backend-configs }}"
+        echo "backend_config:              $backend_config"
 
         var_file=$([ -z "${{ inputs.var-file }}" ] || echo "-var-file=${{ inputs.var-file }}")
 
