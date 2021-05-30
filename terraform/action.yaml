@@ -61,6 +61,7 @@ runs:
           backend_config="-backend-config=init.config"
         fi
 
+        echo "TODO : same removal of '-vars ' for vars as was done for backend"
         var_file=$([ -z "${{ inputs.var-file }}" ] || echo "-var-file=${{ inputs.var-file }}")
 
         terraform init -no-color -input=false "$backend_config"
