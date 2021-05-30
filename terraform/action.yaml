@@ -47,17 +47,24 @@ runs:
       run: |
         cd ${{ inputs.working-dir }}
 
-        if [ -z ${{ inputs.backend-configs }} ]
+        if [ -z "${{ inputs.backend-configs }}" ]
         then
-          backend_config=$([ -z ${{ inputs.backend-config-file }} ] || echo "-backend-config=${{ inputs.backend-config-file }}")
+          backend_config=$([ -z "${{ inputs.backend-config-file }}" ] || echo "-backend-config=${{ inputs.backend-config-file }}")
         else
-          ${{ inputs.backend-configs }} > input.config
-          backend_config="-backend-config=input.config"
+          for config in ${{ inputs.backend-configs }}
+          do
+            IFS='='
+            read -ra ADDR <<< "$config"
+            IFS=' '
+            echo "${ADDR[0]} = \"${ADDR[1]}\"" >> init.config
+          done
+          backend_config="-backend-config=init.config"
         fi
 
-        var_file=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
+        echo "TODO : same removal of '-vars ' for vars as was done for backend"
+        var_file=$([ -z "${{ inputs.var-file }}" ] || echo "-var-file=${{ inputs.var-file }}")
 
-        terraform init -no-color -input=false $backend_config_file
+        terraform init -no-color -input=false "$backend_config"
         terraform validate
 
         if [ ${{ inputs.destroy }} == "true" ]

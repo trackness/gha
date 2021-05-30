@@ -30,4 +30,3 @@ runs:
         pip -q install poetry$POETRY_VERSION
         poetry export -f requirements.txt --output requirements.txt
         pip -q install -r requirements.txt -t ./$PAK_NAME
-#        cd ./$PAK_NAME && zip -q -r9 ../${{ inputs.app-name }}.zip * -x "bin/*"
