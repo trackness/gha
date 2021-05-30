@@ -52,7 +52,7 @@ runs:
           backend_config=$([ -z "${{ inputs.backend-config-file }}" ] || echo "-backend-config=${{ inputs.backend-config-file }}")
         else
           backend_config=""
-          for config in "${{ inputs.backend-configs }}"
+          for config in ${{ inputs.backend-configs }}
           do
             backend_config+="-backend-config=\"$config\" "
           done
