@@ -8,8 +8,13 @@ inputs:
     required: false
     default: terraform
 
-  backend-config:
+  backend-config-file:
     description: "'Terraform init' backend config file location"
+    required: false
+    default: ""
+
+  backend-configs:
+    description: "'Terraform init' backend config parameters"
     required: false
     default: ""
 
@@ -42,10 +47,17 @@ runs:
       run: |
         cd ${{ inputs.working-dir }}
 
-        backend_config=$([ -z ${{ inputs.backend-config }} ] || echo "-backend-config=${{ inputs.backend-config }}")
+        if [ -z ${{ inputs.backend-configs }} ]
+        then
+          backend_config=$([ -z ${{ inputs.backend-config-file }} ] || echo "-backend-config=${{ inputs.backend-config-file }}")
+        else
+          ${{ inputs.backend-configs }} > input.config
+          backend_config="-backend-config=input.config"
+        fi
+
         var_file=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
 
-        terraform init -no-color -input=false $backend_config
+        terraform init -no-color -input=false $backend_config_file
         terraform validate
 
         if [ ${{ inputs.destroy }} == "true" ]
