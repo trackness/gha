@@ -53,7 +53,7 @@ runs:
         else
           for config in ${{ inputs.backend-configs }}
           do
-            backend_config+="-backend-config="
+            backend_config+="-backend-config "
             backend_config+='"'
             backend_config+="$config"
             backend_config+='" '
