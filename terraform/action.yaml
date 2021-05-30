@@ -59,7 +59,7 @@ runs:
         fi
 
         echo "### backend_config: $backend_config"
-        cat $backend_config
+        cat "$backend_config"
 
         var_file=$([ -z ${{ inputs.var-file }} ] || echo "-var-file=${{ inputs.var-file }}")
 
