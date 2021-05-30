@@ -50,7 +50,7 @@ runs:
         echo "### inputs.backend-configs: ${{ inputs.backend-configs }}"
         echo "### inputs.backend-config-file: ${{ inputs.backend-config-file }}"
 
-        if [ -z ${{ inputs.backend-configs }} ]
+        if [ -z ${{ inputs.backend-configs }} ];
         then
           backend_config=$([ -z ${{ inputs.backend-config-file }} ] || echo "-backend-config=${{ inputs.backend-config-file }}")
         else
