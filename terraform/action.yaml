@@ -54,7 +54,7 @@ runs:
           backend_config=""
           for config in "${{ inputs.backend-configs }}"
           do
-            backend_config+='-backend-config="$config" '
+            backend_config+="-backend-config=\"$config\" "
           done
         fi
 
