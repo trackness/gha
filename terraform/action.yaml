@@ -47,17 +47,16 @@ runs:
       run: |
         cd ${{ inputs.working-dir }}
 
-        if [ -z "${{ inputs.backend-configs }}" ];
+        if [ -z "${{ inputs.backend-configs }}" ]
         then
           backend_config=$([ -z "${{ inputs.backend-config-file }}" ] || echo "-backend-config=${{ inputs.backend-config-file }}")
         else
-          for config in ${{ inputs.backend-configs }}; do
+          for config in ${{ inputs.backend-configs }}
+          do
             IFS='='
             read -ra ADDR <<< "$config"
             IFS=' '
-            do
-              echo "${ADDR[0]} = \"${ADDR[1]}\"" >> init.config
-            done
+            echo "${ADDR[0]} = \"${ADDR[1]}\"" >> init.config
           done
           backend_config="-backend-config=init.config"
         fi
