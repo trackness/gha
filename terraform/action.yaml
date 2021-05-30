@@ -54,6 +54,10 @@ runs:
           backend_config="${{ inputs.backend-configs }}"
         fi
 
+        echo "inputs.backend-configs:      ${{ inputs.backend-configs }}"
+        echo "inputs.backend-configs-file: ${{ inputs.backend-configs-file }}"
+        echo "backend_config:              ${{ inputs.backend-configs }}"
+
         var_file=$([ -z "${{ inputs.var-file }}" ] || echo "-var-file=${{ inputs.var-file }}")
 
         terraform init -no-color -input=false "$backend_config"
