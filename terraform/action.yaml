@@ -53,8 +53,9 @@ runs:
         else
           for config in ${{ inputs.backend-configs }}
           do
-            backend_config+="-backend-config=$config "
+             echo "$config" >> init.config
           done
+          backend_config="-backend-config=init.config"
         fi
 
         echo "inputs.backend-configs:      ${{ inputs.backend-configs }}"
