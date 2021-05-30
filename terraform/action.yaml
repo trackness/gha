@@ -51,11 +51,15 @@ runs:
         then
           backend_config=$([ -z "${{ inputs.backend-config-file }}" ] || echo "-backend-config=${{ inputs.backend-config-file }}")
         else
-          backend_config="${{ inputs.backend-configs }}"
+          backend_config=""
+          for config in "${{ inputs.backend-configs }}"
+          do
+            backend_config+='-backend-config="$config" '
+          done
         fi
 
         echo "inputs.backend-configs:      ${{ inputs.backend-configs }}"
-        echo "inputs.backend-configs-file: ${{ inputs.backend-configs-file }}"
+        echo "inputs.backend-config-file:  ${{ inputs.backend-config-file }}"
         echo "backend_config:              ${{ inputs.backend-configs }}"
 
         var_file=$([ -z "${{ inputs.var-file }}" ] || echo "-var-file=${{ inputs.var-file }}")
