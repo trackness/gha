@@ -54,8 +54,7 @@ runs:
         then
           backend_config=$([ -z ${{ inputs.backend-config-file }} ] || echo "-backend-config=${{ inputs.backend-config-file }}")
         else
-          ${{ inputs.backend-configs }} > input.config
-          backend_config="-backend-config=input.config"
+          backend_config=${{ inputs.backend-configs }}
         fi
 
         echo "### backend_config: $backend_config"
