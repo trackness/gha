@@ -28,5 +28,5 @@ runs:
         PAK_NAME=$([ -z ${{ inputs.pak-name }} ] && echo ${{ inputs.app-name }} || echo ${{ inputs.pak-name }})
 
         pip -q install poetry$POETRY_VERSION
-        poetry export -f requirements.txt --output requirements.txt
+        poetry export -f requirements.txt --output requirements.txt --without-hashes
         pip -q install -r requirements.txt -t ./$PAK_NAME
